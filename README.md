@@ -36,7 +36,7 @@ Exit codes (the CI contract): `0` clean, `1` BLOCK, `2` WARN, `3` engine fault.
 - run: python silentlint/cli.py scan . --exclude tests/fixtures
 ```
 
-Python 3.9 or newer. Zero third-party dependencies. 35 tests, about 2.5 seconds:
+Python 3.9 or newer. Zero third-party dependencies. 37 tests, about 2.5 seconds:
 `python -m unittest discover -s tests`.
 
 ## Why not just use something else
@@ -61,7 +61,7 @@ A ruleset is one directory with a `ruleset.py` that exposes a `RuleSet` class wh
 
 | Layer | What it is | Where it lives |
 |---|---|---|
-| Open | engine, D1/D3 detectors, ai-output and python-ast rulesets, 35 tests, CI | this repo, MIT |
+| Open | engine, D1/D3 detectors, ai-output and python-ast rulesets, 37 tests, CI | this repo, MIT |
 | Partner | vertical rule packs (e-commerce, music, short-video, design), team CI gates, custom rule development | paid tiers; interfaces documented here, rule bodies not shipped |
 | Never | calibration data, threshold provenance, internal audit ledgers | not in this repo, not in any repo |
 
