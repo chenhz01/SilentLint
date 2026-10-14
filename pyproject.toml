@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "silentlint"
+version = "0.1.0"
+description = "eslint for AI output — 交付前质检：抓「说完成但工件不存在」的沉默失败"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Zhengming"}]
+keywords = ["ai", "lint", "agent", "quality", "audit", "silent-failure", "eval"]
+
+[project.scripts]
+silentlint = "silentlint.cli:main"
+
+[tool.setuptools]
+packages = ["silentlint", "silentlint.engine"]
+
+[tool.setuptools.package-data]
+"silentlint" = ["rulesets/*/ruleset.py"]

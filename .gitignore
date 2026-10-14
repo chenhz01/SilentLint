@@ -1,0 +1,27 @@
+# SilentLint 发布卫生（2026-10-14 立）
+#
+# 锁层不进公开仓 —— R-PL1 三层分离的机械执行：
+#   垂直规则集（ecommerce/music/design/shortvideo）= 付费层库存，
+#   公开即杀死规则包收入；docs/商业模式 = 内部配方。
+# 声明必须由 git check-ignore -v 实证生效（R-PL5：靠记性必然失守）。
+
+# 付费层：垂直规则集（README 的 "Not in this repo" 段指向此处）
+silentlint/rulesets/design/
+silentlint/rulesets/ecommerce/
+silentlint/rulesets/music/
+silentlint/rulesets/shortvideo/
+
+# 内部数据：总检结果含全量路径清单（R-PL1 C 层）
+dogfood_sweep_result.json
+_dogfood_*.json
+
+# 内部配方：商业模式文档
+docs/商业模式-*.md
+
+# 机械噪声
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
