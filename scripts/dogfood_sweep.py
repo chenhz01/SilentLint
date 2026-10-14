@@ -99,6 +99,12 @@ def sweep(root: Path, exclude_patterns=()):
 
 
 def main():
+    # 同 cli.py：Windows cp1252 管道下非 ASCII 输出会崩栈（2026-10-14 实录）
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding='utf-8', errors='replace')
+        except (AttributeError, ValueError):
+            pass
     root = Path(sys.argv[1] if len(sys.argv) > 1 else ROOT.parent)
     excludes = sys.argv[2:] or []
     if "SilentLint/tests/fixtures" not in excludes:

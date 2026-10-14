@@ -415,5 +415,31 @@ class TestCliDirScan(unittest.TestCase):
             self.assertNotIn("junk.md", r.stdout)
 
 
+    def test_cli_survives_non_utf8_stdout(self):
+        """Windows CI 实录回归：cp1252 管道下 ✓/✗ 曾让 CLI 崩在 print。
+        PYTHONIOENCODING=cp1252 在任何平台可复现该环境。
+        断言：不崩、无 UnicodeEncodeError、退出码契约不变。"""
+        import os
+        env = dict(os.environ, PYTHONIOENCODING="cp1252")
+        for target, expect in ((FIX / "clean_ast.py", 0),
+                               (FIX / "planted" / "ast_defects.py", 1)):
+            r = subprocess.run(
+                [sys.executable, str(ROOT / "silentlint" / "cli.py"), "scan",
+                 str(target)], capture_output=True, env=env)
+            self.assertEqual(r.returncode, expect,
+                             msg=f"{target.name} under cp1252 stdout")
+            self.assertNotIn(b"UnicodeEncodeError", r.stderr)
+
+    def test_check_stdlib_survives_cp1252(self):
+        """零依赖守卫脚本同样不得被输出编码杀死"""
+        import os
+        env = dict(os.environ, PYTHONIOENCODING="cp1252")
+        r = subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "check_stdlib.py")],
+            capture_output=True, env=env)
+        self.assertEqual(r.returncode, 0)
+        self.assertNotIn(b"UnicodeEncodeError", r.stderr)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

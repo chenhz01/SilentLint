@@ -234,7 +234,22 @@ def cmd_entropy(args) -> int:
     return entropy_exit_code(stats)
 
 
+def _force_utf8_output():
+    """Windows CI 实录（2026-10-14 首跑）：GitHub Windows runner 的管道
+    stdout 编码是 cp1252，报告里的 ✓/✗/⛔/💥 在 print 时直接
+    UnicodeEncodeError 崩栈 —— Ubuntu 三个版本全过、Windows 两个版本
+    全败，本地 Git Bash（UTF-8）永远复现不了。双平台矩阵的价值实录。
+    修法：入口处把 stdout/stderr 重配为 UTF-8（errors=replace 兜底），
+    流不支持 reconfigure 时静默降级，绝不让输出编码决定程序生死。"""
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding='utf-8', errors='replace')
+        except (AttributeError, ValueError):
+            pass
+
+
 def main(argv=None) -> int:
+    _force_utf8_output()
     ap = argparse.ArgumentParser(
         prog="silentlint",
         description="eslint for AI output —— 交付前质检："

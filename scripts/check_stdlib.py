@@ -33,6 +33,12 @@ def imports_of(path: Path):
 
 
 def main() -> int:
+    # 同 cli.py：Windows CI 的 cp1252 管道曾让 ✓ 崩栈（2026-10-14 实录）
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding='utf-8', errors='replace')
+        except (AttributeError, ValueError):
+            pass
     if not hasattr(sys, "stdlib_module_names"):
         print("SKIP 零依赖守卫：Python < 3.10 无 sys.stdlib_module_names"
               "（CI 矩阵最低 3.10，不会触发此分支）")
